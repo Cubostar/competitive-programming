@@ -21,6 +21,30 @@ class Knapsack {
         }
     }
 
+    // Dynamic programming solution
+    static int knapsack(int[] weights, int[] values, int capacity){
+        int[][] knapsack = new int[weights.length][capacity + 1];
+
+        for (int i = 0; i < weights.length; i++){
+            knapsack[i][0] = 0;
+        }
+        for (int i = 0; i < knapsack[0].length; i++){
+            knapsack[0][i] = 0;
+        }
+
+        for (int i = 1; i < weights.length; i++){
+            for (int j = 1; j < knapsack[0].length; j++){
+                if (j < weights[i]){
+                    knapsack[i][j] = knapsack[i - 1][j];
+                } else {
+                    knapsack[i][j] = Math.max(knapsack[i - 1][j], knapsack[i - 1][j - weights[i]] + values[i]);
+                }
+            }
+        }
+        
+        return(knapsack[weights.length - 1][capacity]);
+    }
+
     public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
         int items = sc.nextInt();
@@ -35,7 +59,7 @@ class Knapsack {
 
         int capacity = sc.nextInt();
 
-        System.out.println(recursiveKnapsack(weights, values, capacity));
+        System.out.println(knapsack(weights, values, capacity));
         sc.close();
     }
 }
