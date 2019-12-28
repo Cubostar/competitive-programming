@@ -34,7 +34,7 @@ class Dijikstra {
         
         for (int i = 0; i < graph.length; i++){
 			if (graph[vertex1][i] != -1){
-				pq.add(new Edge(1, i, graph[vertex1][i]));
+				pq.add(new Edge(vertex1, i, graph[vertex1][i]));
 			}
 		}
 		
