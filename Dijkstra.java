@@ -8,13 +8,11 @@ import java.util.Scanner;
 class Dijikstra {
 
 	static class Edge implements Comparable<Edge> {
-		public int vertex1;
-		public int vertex2;
+		public int vertex;
 		public int length;
 
-		public Edge(int vertex1, int vertex2, int length){
-			this.vertex1 = vertex1;
-			this.vertex2 = vertex2;
+		public Edge(int vertex, int length){
+			this.vertex = vertex;
 			this.length = length;
 		}
 
@@ -23,7 +21,7 @@ class Dijikstra {
 		}
 
 		public String toString(){
-			return(vertex1 + ", " + vertex2 + ", " + length);
+			return(vertex + ", " + length);
 		}
 	}
 
@@ -41,19 +39,19 @@ class Dijikstra {
 
 		while (!pq.isEmpty()){
 			Edge e = pq.poll();
-			ArrayList<Edge> al = graph.get(e.vertex2);
+			ArrayList<Edge> al = graph.get(e.vertex);
 
 			// For debugging:
 			// System.out.println(e);
 
 			if (!IntStream.of(dijkstra).anyMatch(x -> x == -1)){
 				break;
-			} else if (dijkstra[e.vertex2] != -1){
+			} else if (dijkstra[e.vertex] != -1){
 				continue;
 			} else {
-				dijkstra[e.vertex2] = e.length;
+				dijkstra[e.vertex] = e.length;
 				for (int i = 0; i < al.size(); i++){
-						pq.add(new Edge(e.vertex2, al.get(i).vertex2, al.get(i).length + e.length));
+						pq.add(new Edge(al.get(i).vertex, al.get(i).length + e.length));
 					}
 			}
 		}
@@ -81,8 +79,8 @@ class Dijikstra {
 			int vertex2 = sc.nextInt();
 			int length = sc.nextInt();
 			
-			graph.get(vertex1).add(new Edge(vertex1, vertex2, length));
-			graph.get(vertex2).add(new Edge(vertex2, vertex1, length));
+			graph.get(vertex1).add(new Edge(vertex2, length));
+			graph.get(vertex2).add(new Edge(vertex1, length));
 		}
 
 		int vertex1 = sc.nextInt();
