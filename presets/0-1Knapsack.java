@@ -1,3 +1,4 @@
+package presets;
 import java.util.Scanner;
 
 // Assumes that there is only one copy of each item, O(kn) where k is # of items and n is max capacity
