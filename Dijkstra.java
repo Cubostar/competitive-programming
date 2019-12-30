@@ -1,7 +1,10 @@
 import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
 import java.util.Scanner;
 
-// Uses adjacency matrix, O(n^2)
+// Uses adjacency list (ArrayList of ArrayList of Edges), O(M*log(n)) where n is # of vertices and M is # of edges
+// Assumes each edge is unique (only one edge between two nodes)
 class Dijikstra {
 
 	static class Edge implements Comparable<Edge> {
@@ -25,34 +28,33 @@ class Dijikstra {
 	}
 
     // Finds shortest distance from one node to each node
-    static int[] dijkstra(int[][] graph, int vertex1){
+    static int[] dijkstra(ArrayList<ArrayList<Edge>> graph, int vertex1){
 		PriorityQueue<Edge> pq = new PriorityQueue<Edge>();
-		int[] dijkstra = new int[graph.length];
-		for (int i = 0; i < graph.length; i++){
+		int[] dijkstra = new int[graph.size()];
+		for (int i = 0; i < graph.size(); i++){
 			dijkstra[i] = -1;
 		}
-        
-        for (int i = 0; i < graph.length; i++){
-			if (graph[vertex1][i] != -1){
-				pq.add(new Edge(vertex1, i, graph[vertex1][i]));
-			}
+
+        for (int i = 0; i < graph.get(vertex1).size(); i++){
+			pq.add(graph.get(vertex1).get(i));
 		}
-		
+
 		while (!pq.isEmpty()){
 			Edge e = pq.poll();
+			ArrayList<Edge> al = graph.get(e.vertex2);
 
 			// For debugging:
 			// System.out.println(e);
-			
-			if (dijkstra[e.vertex2] != -1){
-				;
+
+			if (!IntStream.of(dijkstra).anyMatch(x -> x == -1)){
+				break;
+			} else if (dijkstra[e.vertex2] != -1){
+				continue;
 			} else {
 				dijkstra[e.vertex2] = e.length;
-				for (int i = 0; i < graph.length; i++){
-					if (graph[e.vertex2][i] != -1){
-						pq.add(new Edge(e.vertex2, i, graph[e.vertex2][i] + e.length));
+				for (int i = 0; i < al.size(); i++){
+						pq.add(new Edge(e.vertex2, al.get(i).vertex2, al.get(i).length + e.length));
 					}
-				}
 			}
 		}
 
@@ -60,7 +62,7 @@ class Dijikstra {
 	}
 
     // Finds shortest distance between two vertices
-    static int dijkstra(int[][] graph, int vertex1, int vertex2){
+    static int dijkstra(ArrayList<ArrayList<Edge>> graph, int vertex1, int vertex2){
         int[] dijkstra = dijkstra(graph, vertex1);
         return(dijkstra[vertex2]);
     }
@@ -68,25 +70,19 @@ class Dijikstra {
 		Scanner sc = new Scanner(System.in);
 		int vertices = sc.nextInt();
 		int edges = sc.nextInt();
-        int[][] graph = new int[vertices + 1][vertices + 1];
-        
-		// Adjacency matrix version (vertices start counting at 1, not zero)
-		for (int i = 0; i < vertices + 1; i++) { // Initialize matrix to have -1 in each entry
-			for (int j = 0; j < vertices + 1; j++) {
-				if (i == j){
-					graph[i][j] = 0;
-				}
-				graph[i][j] = -1;
-			}
+		ArrayList<ArrayList<Edge>> graph = new ArrayList<ArrayList<Edge>>();
+
+		for (int vertex = 0; vertex < vertices + 1; vertex++){
+			graph.add(new ArrayList<Edge>());
 		}
-		for (int lengths = 0; lengths < edges; lengths++) { //Takes inputs and adds them to matrix
+
+		for (int lengths = 0; lengths < edges; lengths++) { //Takes inputs and adds them to list
 			int vertex1 = sc.nextInt();
 			int vertex2 = sc.nextInt();
 			int length = sc.nextInt();
 			
-			// If there's recurring paths, you may want to check if the preexisting entry is lower (but not -1)
-			graph[vertex1][vertex2] = length;
-			graph[vertex2][vertex1] = length;
+			graph.get(vertex1).add(new Edge(vertex1, vertex2, length));
+			graph.get(vertex2).add(new Edge(vertex2, vertex1, length));
 		}
 
 		int vertex1 = sc.nextInt();
