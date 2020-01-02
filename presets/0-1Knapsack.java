@@ -4,7 +4,7 @@ import java.util.Scanner;
 // Assumes that there is only one copy of each item, O(kn) where k is # of items and n is max capacity
 class Knapsack {
 
-    // Recursive version
+    // Recursive version, O(2^n)
     static int recursiveKnapsack(int[] weights, int[] values, int capacity){
         return(rknapsackIter(weights, values, capacity, weights.length - 1, 0));
     }
