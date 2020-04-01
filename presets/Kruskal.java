@@ -26,18 +26,27 @@ class Kruskal {
 		}
     }
 
-    // Disjoint set data structure for union-find
+    // Disjoint set data structure for union-find. Very abstractly made for Kruskal's algorithm.
     static class DisjointSet{
-        public DisjointSet(){
-            
+        private int[] set;
+        private int[] unions;
+
+        public DisjointSet(int n){
+            set = new int[n];
+            unions = new int[n]
+
+            for (int i = 0; i < n; i++){
+                set[i] = i;
+                unions[i] = i;
+            }
         }
 
-        public void find(){
-
+        public int find(int i){
+            return unions[i];
         }
 
-        public void union(){
-
+        public void union(int a, int b){
+            unions[b] = unions[a];
         }
     }
     
