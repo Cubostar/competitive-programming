@@ -25,6 +25,21 @@ class Kruskal {
 			return(vertex1 + ", " + vertex2 + ", " + length);
 		}
     }
+
+    // Disjoint set data structure for union-find
+    static class DisjointSet{
+        public DisjointSet(){
+            
+        }
+
+        public void find(){
+
+        }
+
+        public void union(){
+
+        }
+    }
     
     static int kruskal(int vertices, PriorityQueue<Edge> pq){
         Boolean[] visited = new Boolean[vertices + 1];
