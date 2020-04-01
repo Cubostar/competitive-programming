@@ -32,8 +32,8 @@ class Kruskal {
         private int[] unions;
 
         public DisjointSet(int n){
-            set = new int[n];
-            unions = new int[n]
+            set = new int[n+1];
+            unions = new int[n+1]
 
             for (int i = 0; i < n; i++){
                 set[i] = i;
@@ -48,28 +48,32 @@ class Kruskal {
         public void union(int a, int b){
             unions[b] = unions[a];
         }
+
+        public boolean isFullUnioned(){
+            int first = unions[1];
+            for (int i = 2; i < unions.length; i++){
+                if (first != unions[i]) return false;
+            }
+
+            return true;
+        }
     }
     
     static int kruskal(int vertices, PriorityQueue<Edge> pq){
-        Boolean[] visited = new Boolean[vertices + 1];
-        visited[0] = true;
-        for (int i = 1; i < visited.length; i++){
-            visited[i] = false;
-        }
         int kruskal = 0;
 
-        while (Arrays.asList(visited).contains(false)){
+        DisjointSet ds = new DisjointSet(vertices);
+
+        while (!ds.isFullUnioned()){
             Edge e = pq.poll();
-            if (visited[e.vertex1] && visited[e.vertex2]){
+            if (ds.find(e.vertex1) == ds.find(e.vertex2)){
                 continue;
             } else {
                 kruskal += e.length;
-                visited[e.vertex1] = true;
-                visited[e.vertex2] = true;
+                ds.union(e.vertex1, e.vertex2);
             }
         }
 
-        kruskal += pq.poll().length;
         return(kruskal);
     }
     public static void main(String[] args){
