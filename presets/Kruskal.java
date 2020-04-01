@@ -1,7 +1,6 @@
 package presets;
 import java.util.PriorityQueue;
 import java.util.Scanner;
-import java.util.Arrays;
 
 class Kruskal {
 
@@ -33,9 +32,9 @@ class Kruskal {
 
         public DisjointSet(int n){
             set = new int[n+1];
-            unions = new int[n+1]
+            unions = new int[n+1];
 
-            for (int i = 0; i < n; i++){
+            for (int i = 1; i < set.length; i++){
                 set[i] = i;
                 unions[i] = i;
             }
@@ -46,16 +45,26 @@ class Kruskal {
         }
 
         public void union(int a, int b){
-            unions[b] = unions[a];
+            int check = unions[b];
+            for (int i = 1; i < unions.length; i++){
+                if (unions[i] == check) unions[i] = unions[a];
+            }
         }
 
         public boolean isFullUnioned(){
             int first = unions[1];
-            for (int i = 2; i < unions.length; i++){
+            for (int i = 1; i < unions.length; i++){
                 if (first != unions[i]) return false;
             }
 
             return true;
+        }
+
+        public void printUnions(){
+            System.out.println("");
+            for (int i = 1; i < unions.length; i++){
+                System.out.print(unions[i] + ", ");
+            }
         }
     }
     
