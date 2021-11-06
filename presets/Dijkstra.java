@@ -67,6 +67,12 @@ class Dijikstra {
     }
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
+		// I/O is as follows:
+		// {number of nodes} {number of edges}
+		// {first endpoint of edge 1} {second endpoint of edge 1} {weight of edge 1}
+		// {first endpoint of edge 2} {second endpoint of edge 2} {weight of edge 2}
+		// ...                        ...                         ...
+		// {source node} {destination node}
 		int vertices = sc.nextInt();
 		int edges = sc.nextInt();
 		ArrayList<ArrayList<Edge>> graph = new ArrayList<ArrayList<Edge>>();
@@ -80,6 +86,7 @@ class Dijikstra {
 			int vertex2 = sc.nextInt();
 			int length = sc.nextInt();
 			
+			// Assmes graph is undirected
 			graph.get(vertex1).add(new Edge(vertex2, length));
 			graph.get(vertex2).add(new Edge(vertex1, length));
 		}
