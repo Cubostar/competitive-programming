@@ -14,11 +14,24 @@ public class PeytonsParadePlanningPlight {
         }
 
         int[] houseRobber = new int[parade.length];
-        houseRobber[0] = parade[0];
-        houseRobber[1] = Math.max(parade[0], parade[1]);
+        if (parade[0] < 0) {
+            houseRobber[0] = 0;
+        } else {
+            houseRobber[0] = parade[0];
+        }
+
+        if (parade[1] < 0) {
+            houseRobber[1] = houseRobber[0];
+        } else {
+            houseRobber[1] = Math.max(parade[0], parade[1]);
+        }
 
         for (int i = 2; i < houseRobber.length; i += 1) {
-            houseRobber[i] = Math.max(houseRobber[i - 1], houseRobber[i - 2] + parade[i]);
+            if (parade[i] < 0) {
+                houseRobber[i] = Math.max(houseRobber[i - 1], houseRobber[i - 2]);
+            } else {
+                houseRobber[i] = Math.max(houseRobber[i - 1], houseRobber[i - 2] + parade[i]);
+            }
         }
 
         return houseRobber[houseRobber.length - 1];
@@ -33,5 +46,6 @@ public class PeytonsParadePlanningPlight {
         }
 
         System.out.println(houseRobber(parade));
+        sc.close();
     }
 }
